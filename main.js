@@ -85,7 +85,7 @@ Vue.component('hero-card', {
 	template: `
 		<div class="hero relative border-4 rounded-lg w-full m-3 flex flex-col" :class="[{ 'border-orange shadow-lg': hero.favorite === true}]">
 			<button @click="upvote(hero)" class="absolute bg-grey-lighter py-2 px-4 m-2 border-2 rounded-lg hover:bg-white hover:shadow focus:outline-none focus:shadow-outline">
-				👍 
+				👍 {{hero.likes}}
 			</button>
 			<img class="w-full block mx-auto rounded-t" v-bind:src="hero.images.md" />
 			<div id="stats" class="absolute pin-r bg-grey-lighter border rounded p-2 m-2">
@@ -96,8 +96,8 @@ Vue.component('hero-card', {
 			<div class="hero-info p-5">
 				<h1 class="mb-3">{{hero.name}}</h1>
 				<p class="leading-normal">{{hero.bio}}</p>
-				<a 
-					class="p-3 mt-3 border bg-blue text-white rounded cursor-pointer inline-block"
+				<button 
+					class="p-3 mt-3 border bg-blue text-white rounded focus:outline-none focus:shadow-outline"
 					@click="addToFavorites(hero)">
 					<span
 						:class="[{ 'hidden': hero.favorite }]">
@@ -111,7 +111,7 @@ Vue.component('hero-card', {
 					</span>
 					favorites 
 					<i class="fa fa-plus-square-o"></i>
-				</a>
+				</button>
 			</div>
 		</div>
 	`,
@@ -160,17 +160,16 @@ Vue.component('hero-cards-deck', {
 		axios
 			.get(all_heroes_json_url)
 			.then(response => {
-				response.data.map((hero) => this.addFavoriteProperty(hero));
+				response.data.map((hero) => this.addProperty(hero));
 				this.heroes = response.data;
 			});
-		
 	},
 	methods: {
 		shuffleHeroes() {
 			this.heroes = _.shuffle(this.heroes);
 		},
-		addFavoriteProperty(object) {
-			Object.assign(object, { favorite: false });
+		addProperty(object) {
+			Object.assign(object, { favorite: false, likes: 0 });
 		}
 	}
 });
