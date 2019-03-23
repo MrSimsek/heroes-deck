@@ -40,11 +40,37 @@ let heroes = [
 		},
 		favorite: false
 	},
+	{
+		id: 4,
+		name: "Catwoman",
+		image: "https://avatarfiles.alphacoders.com/704/70401.jpg",
+		bio: "Selina Kyle, also known as Catwoman, is a fictional character associated with DC Comics' Batman franchise and created by Bill Finger and Bob Kane. Currently portrayed as an orphan who learned to survive on Gotham City's streets, Selina took to thievery to survive... but determined to do it in style, she learned martial arts and trained extensively to perfect her skills in cat burglary. ",
+		likes: 13,
+		stats: {
+			attack: 2,
+			defense: 3,
+			speed: 10
+		},
+		favorite: false
+	},
+	{
+		id: 5,
+		name: "Harley Quinn",
+		image: "https://avatarfiles.alphacoders.com/659/65900.jpg",
+		bio: "In her first appearances she was depicted as a character completely devoted to the Joker, totally oblivious to his psychotic nature and obvious lack of affection for her; this characterization has remained more or less consistent throughout her subsequent appearances.",
+		likes: 13,
+		stats: {
+			attack: 2,
+			defense: 3,
+			speed: 10
+		},
+		favorite: false
+	},
 ];
 
 Vue.component('input-element', {
-	props: ['heroName'],
 	template: '<input class="m-3 mx-auto border-2 rounded-lg p-3 w-3/4 text-grey-darker text-sm focus:outline-none focus:shadow-outline" type="text" :placeholder="setPlaceholder" />',
+	props: ['heroName'],
 	computed: {
 		setPlaceholder() {
 			return 'Thoughts about ' + this.heroName + '?';
@@ -55,7 +81,7 @@ Vue.component('input-element', {
 Vue.component('hero-card', {
 	props: ['hero'],
 	template: `
-		<div class="hero relative border-4 rounded-lg max-w-sm md:w-1/3 lg:w-1/4 m-3 flex flex-col" :class="[{ 'border-orange shadow-lg': hero.favorite === true}]">
+		<div class="hero relative border-4 rounded-lg max-w-sm w-full m-3 flex flex-col" :class="[{ 'border-orange shadow-lg': hero.favorite === true}]">
 			<button @click="upvote(hero)" class="absolute bg-grey-lighter py-2 px-4 m-2 border-2 rounded-lg hover:bg-white hover:shadow focus:outline-none focus:shadow-outline">
 				👍 {{hero.likes}}
 			</button>
@@ -99,41 +125,65 @@ Vue.component('hero-card', {
 	}
 });
 
-new Vue({
-	el: '#app',
+Vue.component('hero-cards-deck', {
+	template: `
+		<div id="hero-cards-deck" class="flex flex-col justify-center items-center">
+			<button @click="shuffleHeroes" class="p-3 m-5 mx-auto rounded bg-black text-white focus:outline-none focus:shadow-outline">
+				Shuffle Heroes
+			</button>
+			<p v-if="favoriteHeroes.length > 0" class="text-xl my-5">
+				You have {{favoriteHeroes.length}} favorite 
+				<span v-if="favoriteHeroes.length === 1">hero.</span>
+				<span v-else>heroes.</span>
+			</p>
+			<p v-else class="text-xl my-5">
+				You don't have any favorite heroes.
+			</p>
+			<div class="heroes">
+				<hero-card 
+					v-for="hero in heroes" 
+					:key="hero.id"
+					:hero="hero"
+				></hero-card>
+			</div>
+		</div>
+	`,
 	data() { 
 		return {
 			heroes,
 			favoriteHeroes: []
 		}
 	},
-	beforeCreate: function() {
-		console.log("beforeCreate");
-	},
-	created: function() {
-		console.log("created");
-	},
-	beforeMount: function() {
-		console.log("beforeMount");
-	},
-	mounted: function() {
-		console.log("mounted");
-	},
-	beforeUpdate: function() {
-		console.log("beforeUpdate");
-	},
-	updated: function() {
-		console.log("updated");
-	},
-	beforeDestroy: function() {
-		console.log("beforeDestroy");
-	},
-	destroyed: function() {
-		console.log("destroyed");
-	},
 	methods: {
 		shuffleHeroes() {
 			this.heroes = _.shuffle(this.heroes);
 		}
 	}
+});
+
+// Pages
+const Home =  {
+	template: `
+		<div id="home-page" class="h-full">
+			<hero-cards-deck></hero-cards-deck>
+		</div>
+	`
+};
+
+const Collections = {
+	template: '<div>hey!</div>'
+};
+
+const routes = [
+	{ path: '/', component: Home },
+	{ path: '/collections', component: Collections }
+];
+
+const router = new VueRouter({
+	routes
+});
+
+const vm = new Vue({
+	el: '#app',
+	router
 });

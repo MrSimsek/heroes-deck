@@ -7,31 +7,33 @@
     <title>Vue Heroes Deck</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <style>
+        .heroes {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+        }
+        .hero {
+            min-width: 300px;
+        }
+    </style>
 </head>
 <body>
-    <div id="app" class="flex flex-col justify-center items-center">
-        <button @click="shuffleHeroes" class="p-3 m-5 mx-auto rounded bg-black text-white focus:outline-none focus:shadow-outline">
-            Shuffle Heroes
-        </button>
-
-        <p v-if="favoriteHeroes.length > 0" class="text-xl my-5">
-            You have {{favoriteHeroes.length}} favorite 
-            <span v-if="favoriteHeroes.length === 1">hero.</span>
-            <span v-else>heroes.</span>
-        </p>
-        <p v-else class="text-xl my-5">
-            You don't have any favorite heroes.
-        </p>
-        
-        <div class="heroes flex flex-col md:flex-row justify-center">
-            <hero-card 
-                v-for="hero in heroes" 
-                :key="hero.id"
-                :hero="hero"
-            ></hero-card>
-        </div>
+    <div id="app">
+        <nav class="flex justify-center">
+            <ul class="list-reset flex">
+                <li class="m-3"><router-link to="/">Home</router-link></li>
+                <li class="m-3"><router-link to="/collections">Collections</router-link></li>
+            </ul>
+            <div id="main-stats" class="absolute pin-r bg-grey-lighter border rounded p-2 m-5 text-2xl">
+                <span id="main-stat__attack" class="main-stat mr-1" role="img">⚔️</span>
+                <span id="main-stat__defense" class="main-stat mr-1" role="img">🛡️</span>
+                <span id="main-stat__speed" class="main-stat mr-1" role="img">⚡</span>
+            </div>
+        </nav>
+        <router-view></router-view>
     </div>
     <script src="vue.min.js"></script>
+    <script src="vue-router.js"></script>
     <script src="lodash.min.js"></script>
     <script src="main.js"></script>
 </body>
