@@ -9,11 +9,11 @@
 </head>
 <body>
     <div id="app" class="flex flex-col justify-center items-center">
-        <button @click="shuffleHeroes" class="p-3 m-5 mx-auto rounded bg-black text-white">
+        <button @click="shuffleHeroes" class="p-3 m-5 mx-auto rounded bg-black text-white focus:outline-none focus:shadow-outline">
             Shuffle Heroes
         </button>
         
-        <div class="heroes flex flex-col md:flex-row">
+        <div class="heroes flex flex-col md:flex-row justify-center">
             <hero-card 
                 v-for="hero in heroes" 
                 :key="hero.id"
@@ -22,7 +22,7 @@
         </div>
     </div>
     <script src="vue.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js" integrity="sha256-7/yoZS3548fXSRXqc/xYzjsmuW3sFKzuvOCHd06Pmps=" crossorigin="anonymous"></script>
+    <script src="lodash.min.js"></script>
     <script src="main.js"></script>
 </body>
 </html>
