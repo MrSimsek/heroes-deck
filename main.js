@@ -1,6 +1,8 @@
 Vue.config.devtools = true;
 
-let heroes = [
+const all_heroes_json_url = "https://cdn.rawgit.com/akabab/superhero-api/0.2.0/api/all.json";
+
+let heasdasdasroes = [
 	{
 		id: 1,
 		name: "Batman",
@@ -81,15 +83,15 @@ Vue.component('input-element', {
 Vue.component('hero-card', {
 	props: ['hero'],
 	template: `
-		<div class="hero relative border-4 rounded-lg max-w-sm w-full m-3 flex flex-col" :class="[{ 'border-orange shadow-lg': hero.favorite === true}]">
+		<div class="hero relative border-4 rounded-lg w-full m-3 flex flex-col" :class="[{ 'border-orange shadow-lg': hero.favorite === true}]">
 			<button @click="upvote(hero)" class="absolute bg-grey-lighter py-2 px-4 m-2 border-2 rounded-lg hover:bg-white hover:shadow focus:outline-none focus:shadow-outline">
-				👍 {{hero.likes}}
+				👍 
 			</button>
-			<img class="w-full block mx-auto rounded-t" v-bind:src="hero.image" />
+			<img class="w-full block mx-auto rounded-t" v-bind:src="hero.images.md" />
 			<div id="stats" class="absolute pin-r bg-grey-lighter border rounded p-2 m-2">
-				<span id="stat__attack" class="stat mr-1" role="img">⚔️ {{hero.stats.attack}}</span>
-				<span id="stat__defense" class="stat mr-1" role="img">🛡️ {{hero.stats.defense}}</span>
-				<span id="stat__speed" class="stat mr-1" role="img">⚡ {{hero.stats.speed}}</span>
+				<span id="stat__attack" class="stat mr-1" role="img">⚔️ {{hero.powerstats.combat}}</span>
+				<span id="stat__defense" class="stat mr-1" role="img">🛡️ {{hero.powerstats.durability}}</span>
+				<span id="stat__speed" class="stat mr-1" role="img">⚡ {{hero.powerstats.speed}}</span>
 			</div>
 			<div class="hero-info p-5">
 				<h1 class="mb-3">{{hero.name}}</h1>
@@ -150,13 +152,25 @@ Vue.component('hero-cards-deck', {
 	`,
 	data() { 
 		return {
-			heroes,
+			heroes: null,
 			favoriteHeroes: []
 		}
+	},
+	mounted() {
+		axios
+			.get(all_heroes_json_url)
+			.then(response => {
+				response.data.map((hero) => this.addFavoriteProperty(hero));
+				this.heroes = response.data;
+			});
+		
 	},
 	methods: {
 		shuffleHeroes() {
 			this.heroes = _.shuffle(this.heroes);
+		},
+		addFavoriteProperty(object) {
+			Object.assign(object, { favorite: false });
 		}
 	}
 });
@@ -185,5 +199,12 @@ const router = new VueRouter({
 
 const vm = new Vue({
 	el: '#app',
-	router
+	router,
+	data: {
+		mainStats: {
+			attack: 0,
+			defense: 0,
+			speed: 0
+		}
+	}
 });
