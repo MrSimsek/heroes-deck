@@ -5,3 +5,4 @@ Card deck of Superheroes
 * Vuejs
 * Vue Router
 * Axios
+* Lodash
