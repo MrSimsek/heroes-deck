@@ -1,7 +1,7 @@
 # Heroes Deck
 Card deck of Superheroes
 
-![Heroes Deck Vue app SS](https://i.ibb.co/377wtP1/Screen-Shot-2019-03-24-at-10-50-40.png "Vue Heroes Deck")
+[Heroes Deck Vue app SS](https://postimg.cc/p9F8tfTL)
 
 ## Tech
 * Vuejs
