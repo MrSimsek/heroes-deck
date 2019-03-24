@@ -1,2 +1,7 @@
-# heroes-deck
-Card deck of iconic characters
+# Heroes Deck
+Card deck of Superheroes
+
+## Tech
+* Vuejs
+* Vue Router
+* Axios
