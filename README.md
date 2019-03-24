@@ -1,13 +1,16 @@
 # Heroes Deck
 Card deck of Superheroes
 
-![Heroes Deck Vue app SS](https://i.postimg.cc/Xv2gdx6d/Screen-Shot-2019-03-24-at-10-50-40.png "Heroes Deck Vue app")
+![Heroes Deck Vue app SS](https://i.postimg.cc/jdsQgGqP/Screen-Shot-2019-03-24-at-11-07-32.png "Heroes Deck Vue app")
 
 ## Tech
 * Vuejs
 * Vue Router
 * Axios
 * Lodash
+
+## API
+* https://github.com/akabab/superhero-api
 
 ## TODOS
 
