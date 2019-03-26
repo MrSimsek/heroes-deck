@@ -15,6 +15,7 @@ Card deck of Superheroes
 ## TODOS
 
 - [ ] Add Loading animation during fetching process in Home page for a better UX
+- [ ] Add favorites filter to cards
 - [ ] Add status to all variables
 - [x] Don't fetch heroes variable and init favoriteHeroes in HeroCardsDeck component, it is destroyed when routing. Fetch happens again, and favoriteHeroes resets.
 - [x] Handle state management for heroes and favoriteHeroes variables with Vuex.
