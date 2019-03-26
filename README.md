@@ -14,6 +14,12 @@ Card deck of Superheroes
 
 ## TODOS
 
+- [ ] a task list item
+- [ ] list syntax required
+- [ ] normal **formatting**, @mentions, #1234 refs
+- [ ] incomplete
+- [x] completed
+
 * ~~Update the main stats at the top right with the total powerstats of favorite heroes~~
 * Add Loading animation during fetching process in Home page for a better UX
 * ~~Don't fetch heroes variable and init favoriteHeroes in HeroCardsDeck component, it is destroyed when routing. Fetch happens again, and favoriteHeroes resets.~~ (Used vuex store)
