@@ -2,74 +2,6 @@ Vue.config.devtools = true;
 
 const all_heroes_json_url = "https://cdn.rawgit.com/akabab/superhero-api/0.2.0/api/all.json";
 
-let heasdasdasroes = [
-	{
-		id: 1,
-		name: "Batman",
-		image: "https://avatarfiles.alphacoders.com/918/91802.jpg",
-		bio: "Unlike most superheroes, Batman does not possess any superpowers; rather, he relies on his genius-level intellect, physical prowess, martial arts abilities, detective skills, science and technology, vast wealth, intimidation, and indomitable will.",
-		likes: 12,
-		stats: {
-			attack: 7,
-			defense: 4,
-			speed: 6
-		},
-		favorite: false
-	},
-	{
-		id: 2,
-		name: "Superman",
-		image: "https://lh3.googleusercontent.com/JuV91B94BijTOwlDybmz8cwxYoVfxs0n9QVbLVxop66APxf_odRLyBr9drIaMvF-BrIrVe-mDk4AcAwDTiw=rw",
-		bio: "Superman was born on the planet Krypton and named Kal-El. As a baby, he was sent to Earth in a small spaceship by his scientist father Jor-El moments before Krypton was destroyed in a natural cataclysm.",
-		likes: 9,
-		stats: {
-			attack: 8,
-			defense: 7,
-			speed: 9
-		},
-		favorite: false
-	},
-	{
-		id: 3,
-		name: "Joker",
-		image: "https://steamuserimages-a.akamaihd.net/ugc/87095428621950208/3FD0255EE8F56E6C2CBD9B4D3855CE613CD99E83/",
-		bio: "The Joker is a supervillain and the archenemy of Batman. He was first introduced in Batman #1 (Spring 1940) and has remained consistently popular. The Joker is a master criminal with a clown-like appearance, and is considered one of the most infamous criminals within Gotham City.",
-		likes: 13,
-		stats: {
-			attack: 2,
-			defense: 3,
-			speed: 10
-		},
-		favorite: false
-	},
-	{
-		id: 4,
-		name: "Catwoman",
-		image: "https://avatarfiles.alphacoders.com/704/70401.jpg",
-		bio: "Selina Kyle, also known as Catwoman, is a fictional character associated with DC Comics' Batman franchise and created by Bill Finger and Bob Kane. Currently portrayed as an orphan who learned to survive on Gotham City's streets, Selina took to thievery to survive... but determined to do it in style, she learned martial arts and trained extensively to perfect her skills in cat burglary. ",
-		likes: 13,
-		stats: {
-			attack: 2,
-			defense: 3,
-			speed: 10
-		},
-		favorite: false
-	},
-	{
-		id: 5,
-		name: "Harley Quinn",
-		image: "https://avatarfiles.alphacoders.com/659/65900.jpg",
-		bio: "In her first appearances she was depicted as a character completely devoted to the Joker, totally oblivious to his psychotic nature and obvious lack of affection for her; this characterization has remained more or less consistent throughout her subsequent appearances.",
-		likes: 13,
-		stats: {
-			attack: 2,
-			defense: 3,
-			speed: 10
-		},
-		favorite: false
-	},
-];
-
 Vue.component('input-element', {
 	template: '<input class="m-3 mx-auto border-2 rounded-lg p-3 w-3/4 text-grey-darker text-sm focus:outline-none focus:shadow-outline" type="text" :placeholder="setPlaceholder" />',
 	props: ['heroName'],
@@ -117,12 +49,10 @@ Vue.component('hero-card', {
 	`,
 	methods: {
 		upvote(hero) {
-			hero.likes++;
+			this.$store.dispatch('upvote', hero);
 		},
 		addToFavorites(hero) {
-			hero.favorite = !hero.favorite;
-			const favorites = this.$parent.favoriteHeroes;
-			!favorites.includes(hero.name) ? favorites.push(hero.name) : favorites.splice(favorites.indexOf(hero.name), 1);
+			this.$store.dispatch('addToFavorites', hero);
 		}
 	}
 });
@@ -150,26 +80,17 @@ Vue.component('hero-cards-deck', {
 			</div>
 		</div>
 	`,
-	data() { 
-		return {
-			heroes: null,
-			favoriteHeroes: []
+	computed: {
+		heroes() {
+			return this.$store.state.heroes;
+		},
+		favoriteHeroes() {
+			return this.$store.state.favoriteHeroes;
 		}
-	},
-	mounted() {
-		axios
-			.get(all_heroes_json_url)
-			.then(response => {
-				response.data.map((hero) => this.addProperty(hero));
-				this.heroes = response.data;
-			});
 	},
 	methods: {
 		shuffleHeroes() {
-			this.heroes = _.shuffle(this.heroes);
-		},
-		addProperty(object) {
-			Object.assign(object, { favorite: false, likes: 0 });
+			this.$store.dispatch('shuffle');
 		}
 	}
 });
@@ -182,28 +103,93 @@ const Home =  {
 		</div>
 	`
 };
-
 const Collections = {
 	template: '<div>hey!</div>'
 };
 
+// Vue-Router
 const routes = [
 	{ path: '/', component: Home },
 	{ path: '/collections', component: Collections }
 ];
-
 const router = new VueRouter({
 	routes
 });
 
+// Vuex
+const store = new Vuex.Store({
+	state: {
+		heroes: null,
+		favoriteHeroes: []
+	},
+	mutations: {
+		SET_HEROES: (state, heroes) => state.heroes = heroes,
+		UPVOTE_HERO: (state, upvoteHero) => state.heroes.find(hero => hero.name === upvoteHero.name).likes++,
+		ADD_TO_FAVORITES: (state, favoriteHero) => {
+			const hero = state.heroes.find(hero => hero.name === favoriteHero.name);
+			if(hero.favorite) {
+				state.favoriteHeroes.splice(state.favoriteHeroes.indexOf(hero.name), 1);
+			} else {
+				state.favoriteHeroes.push(hero.name);
+			}
+			hero.favorite = !hero.favorite;
+		},
+		SHUFFLE_HEROES: state => state.heroes = _.shuffle(state.heroes)
+	},
+	actions: {
+		fetchAllHeroes({ commit }) {
+			axios
+				.get(all_heroes_json_url)
+				.then(response => response.data)
+				.then(allHeroes => {
+					allHeroes.map(hero => Object.assign(hero, { favorite: false, likes: 0 }));
+					commit('SET_HEROES', allHeroes);
+				});
+		},
+		upvote({commit}, upvoteHero) {
+			commit('UPVOTE_HERO', upvoteHero);
+		},
+		addToFavorites({ commit }, favoriteHero) {
+			commit('ADD_TO_FAVORITES', favoriteHero);
+		},
+		shuffle({commit}) {
+			commit('SHUFFLE_HEROES');
+		}
+	}
+});
+
+// Vue Instance
 const vm = new Vue({
 	el: '#app',
 	router,
+	store,
 	data: {
 		mainStats: {
 			attack: 0,
 			defense: 0,
 			speed: 0
+		}
+	},
+	mounted () {
+		this.$store.dispatch('fetchAllHeroes')
+	},
+	computed: {
+		favoriteHeroes() {
+			return this.$store.state.favoriteHeroes;
+		}
+	},
+	watch: {
+		favoriteHeroes(oldValue, newValue) {
+			this.mainStats.attack = 0;
+			this.mainStats.defense = 0;
+			this.mainStats.speed = 0;
+
+			this.$store.state.favoriteHeroes.forEach(favoriteHeroName => {
+				const hero = this.$store.state.heroes.find(hero => hero.name === favoriteHeroName);
+				this.mainStats.attack += hero.powerstats.combat;
+				this.mainStats.defense += hero.powerstats.durability;
+				this.mainStats.speed += hero.powerstats.speed;
+			});
 		}
 	}
 });
