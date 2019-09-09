@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Vue Heroes Deck</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <style>
         .heroes {
@@ -21,11 +21,11 @@
 <body>
     <div id="app">
         <nav class="flex justify-center">
-            <ul class="list-reset flex">
+            <ul class="list-none flex">
                 <li class="m-3"><router-link to="/">Home</router-link></li>
                 <li class="m-3"><router-link to="/collections">Collections</router-link></li>
             </ul>
-            <div id="main-stats" class="fixed pin-r bg-grey-lighter border rounded p-2 m-5 text-2xl">
+            <div id="main-stats" class="fixed z-10 right-0 bg-gray-100 border rounded p-2 m-5 text-2xl">
                 <span id="main-stat__attack" class="main-stat mr-1" role="img">⚔️ {{mainStats.attack}}</span>
                 <span id="main-stat__defense" class="main-stat mr-1" role="img">🛡️ {{mainStats.defense}}</span>
                 <span id="main-stat__speed" class="main-stat mr-1" role="img">⚡ {{mainStats.speed}}</span>

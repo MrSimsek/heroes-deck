@@ -3,7 +3,7 @@ Vue.config.devtools = true;
 const all_heroes_json_url = "https://cdn.rawgit.com/akabab/superhero-api/0.2.0/api/all.json";
 
 Vue.component('input-element', {
-	template: '<input class="m-3 mx-auto border-2 rounded-lg p-3 w-3/4 text-grey-darker text-sm focus:outline-none focus:shadow-outline" type="text" :placeholder="setPlaceholder" />',
+	template: '<input class="m-3 mx-auto border-2 rounded-lg p-3 w-3/4 text-gray-darker text-sm focus:outline-none focus:shadow-outline" type="text" :placeholder="setPlaceholder" />',
 	props: ['heroName'],
 	computed: {
 		setPlaceholder() {
@@ -15,21 +15,21 @@ Vue.component('input-element', {
 Vue.component('hero-card', {
 	props: ['hero'],
 	template: `
-		<div class="hero relative border-4 rounded-lg w-full m-3 flex flex-col" :class="[{ 'border-orange shadow-lg': hero.favorite === true}]">
-			<button @click="upvote(hero)" class="absolute bg-grey-lighter py-2 px-4 m-2 border-2 rounded-lg hover:bg-white hover:shadow focus:outline-none focus:shadow-outline">
+		<div class="hero relative border-4 rounded-lg w-full m-3 flex flex-col" :class="[{ 'border-orange-500 shadow-lg': hero.favorite === true}]">
+			<button @click="upvote(hero)" class="absolute bg-gray-100 py-2 px-4 m-2 border-2 rounded-lg hover:bg-white hover:shadow focus:outline-none focus:shadow-outline">
 				👍 {{hero.likes}}
 			</button>
 			<img class="w-full block mx-auto rounded-t" v-bind:src="hero.images.md" />
-			<div id="stats" class="absolute pin-r bg-grey-lighter border rounded p-2 m-2">
+			<div id="stats" class="absolute right-0 bg-gray-100 border rounded p-2 m-2">
 				<span id="stat__attack" class="stat mr-1" role="img">⚔️ {{hero.powerstats.combat}}</span>
 				<span id="stat__defense" class="stat mr-1" role="img">🛡️ {{hero.powerstats.durability}}</span>
 				<span id="stat__speed" class="stat mr-1" role="img">⚡ {{hero.powerstats.speed}}</span>
 			</div>
 			<div class="hero-info p-5">
-				<h1 class="mb-3">{{hero.name}}</h1>
+				<h1 class="mb-3 text-3xl font-semibold">{{hero.name}}</h1>
 				<p class="leading-normal">{{hero.bio}}</p>
 				<button 
-					class="p-3 mt-3 border bg-blue text-white rounded focus:outline-none focus:shadow-outline"
+					class="p-3 mt-3 border bg-blue-500 text-white rounded hover:bg-blue-400 focus:outline-none focus:shadow-outline"
 					@click="addToFavorites(hero)">
 					<span
 						:class="[{ 'hidden': hero.favorite }]">
